@@ -1,0 +1,384 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import json"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Importing the data"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train = []\n",
+    "with open('simplified-nq-train.jsonl', 'r') as file:\n",
+    "    print(\"Length of dataset\", len(list(file)))\n",
+    "#     for i in range():\n",
+    "#         # read a sample of 2 json lines\n",
+    "#         train.append(json.loads(file.readline()))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "train = []\n",
+    "with open('simplified-nq-train.jsonl', 'r') as file:\n",
+    "#     print(\"Length of dataset\", len(list(file)))\n",
+    "    for i in range(307373):\n",
+    "        # read a sample of 2 json lines\n",
+    "        train.append(json.loads(file.readline()))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sample = train[0]\n",
+    "sample.keys()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sample['question_text']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sample['document_text'][1952:2019]"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "sample['annotations'][0]"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Finding length of the answers"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "answerslen=[]\n",
+    "for i in train:\n",
+    "    start=i['annotations'][0]['long_answer']['start_token']\n",
+    "    end=i['annotations'][0]['long_answer']['end_token']\n",
+    "    leng=end-start\n",
+    "    answerslen.append(leng)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "answerslen.sort(reverse=True)\n",
+    "print('Length of the Top ten longest answers')\n",
+    "print(answerslen[0:10])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "answerslenclean=[]\n",
+    "for i in answerslen:\n",
+    "    if i!=0:\n",
+    "        answerslenclean.append(i)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "answerslenclean.sort()\n",
+    "print('Length of the Top ten shortest answers')\n",
+    "print(answerslenclean[:10])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print('Mean of the length of answers')\n",
+    "round(np.mean(answerslenclean),3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print('Median of the length of answers')\n",
+    "round(np.median(answerslenclean),3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print('Percentile 75 of the length of answers')\n",
+    "round(np.percentile(answerslenclean,75),3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print('Percentile 90 of the length of answers')\n",
+    "round(np.percentile(answerslenclean,90),3)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "plt.hist(answerslenclean,color= '#F55E61')\n",
+    "plt.title('Histogram for length of words')\n",
+    "plt.show()\n",
+    "plt.hist(answerslenclean, range=(0,4000),color='#F55E61')\n",
+    "plt.title('Histogram for length of words max length 4000')\n",
+    "plt.show()\n",
+    "plt.hist(answerslenclean, range=(0,2000),color='#F55E61')\n",
+    "plt.title('Histogram for length of words max length 2000')\n",
+    "plt.show()\n",
+    "plt.hist(answerslenclean, range=(0,200),color='#F55E61')\n",
+    "plt.title('Histogram for length of words max length 200')\n",
+    "plt.show()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from collections import Counter\n",
+    "print( 'Number of answers by token length. For example, there are 21 answers of length 5')\n",
+    "Counter(answerslenclean)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Finding type of questions"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "nlist = []\n",
+    "for i in range(len(train)):\n",
+    "    print(train[i]['question_text'])\n",
+    "    print((train[i]['question_text']).split(' ', 1)[0])\n",
+    "    nlist.append((train[i]['question_text']).split(' ', 1)[0])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "nlist"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import seaborn as sns\n",
+    "sns.countplot(nlist)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "wholist = []\n",
+    "for i in range(len(train)):\n",
+    "    if \"who\" in (train[i]['question_text']):\n",
+    "        print(\"Sucess\")\n",
+    "        wholist.append(train[i])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import json\n",
+    "\n",
+    "# with open('output.jsonl', 'w') as outfile:\n",
+    "#     for entry in wholist:\n",
+    "#         json.dump(entry, outfile)\n",
+    "#         outfile.write('\\n')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "# import_doc = []\n",
+    "# with open('output.jsonl', 'r') as file:\n",
+    "#     #print(\"Length of dataset\", len(list(file)))\n",
+    "#     for i in range(4):\n",
+    "#         # read a sample of 2 json lines\n",
+    "#         import_doc.append(json.loads(file.readline()))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "# Cleaning the Html tags"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "r = import_doc[0]['document_text']"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import requests\n",
+    "from bs4 import BeautifulSoup"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#declare a soup variable and read in the content\n",
+    "soup = BeautifulSoup(r, 'lxml')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "print(soup)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "#prettify the results\n",
+    "print(soup.prettify())"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.6.6"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
