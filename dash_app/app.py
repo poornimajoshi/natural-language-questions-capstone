@@ -36,10 +36,11 @@ app.layout = html.Div([
             html.Div([html.H3('Predictions')],style={'marginTop': 50}),
             html.Div(html.H6('Answer')),
             html.Div(id='output-container-answer'),
-            html.Div(html.H6('Passage Context')),
-            html.Div(id='output-container-context'),
-            html.Div(html.H6('Original Document')),
-            html.Div(id='output-container-document')
+            html.Div([html.H6('Original Document')], style={'marginTop': 20}),
+            html.Div(id='output-container-document'),
+            html.Div([html.H6('Passage Context')],style={'marginTop': 20}),
+            html.Div(id='output-container-context')
+
         ]),
         dcc.Tab(label='Input your question', value='tab-2', children=[
             html.Div([html.H6('Type your own question')],style={'marginTop': 50}),
@@ -52,9 +53,9 @@ app.layout = html.Div([
             html.Div([html.H3('Predictions')],style={'marginTop': 50}),
             html.Div(html.H6('Answer')),
             html.Div(id='output-container-answer2'),
-            html.Div(html.H6('Passage Context')),
+            html.Div([html.H6('Passage Context')], style={'marginTop': 20}),
             html.Div(id='output-container-context2'),
-            html.Div(html.H6('Original Document')),
+            html.Div([html.H6('Original Document')], style={'marginTop': 20}),
             html.Div(id='output-container-document2')
         ]),
     ],colors={
