@@ -36,7 +36,10 @@ app.layout = html.Div([
             html.Div([html.H3('Predictions')],style={'marginTop': 50}),
             html.Div(html.H6('Answer')),
             html.Div(id='output-container-answer'),
-            html.Div([html.H6('Original Document')], style={'marginTop': 20}),
+            html.Div(html.H6('Annotated answer')),
+            html.Div(id='output-container-answer-annotated'),
+
+            html.Div([html.H6('Original Document\'s Title')], style={'marginTop': 20}),
             html.Div(id='output-container-document'),
             html.Div([html.H6('Passage Context')],style={'marginTop': 20}),
             html.Div(id='output-container-context')
@@ -53,10 +56,11 @@ app.layout = html.Div([
             html.Div([html.H3('Predictions')],style={'marginTop': 50}),
             html.Div(html.H6('Answer')),
             html.Div(id='output-container-answer2'),
+
+            html.Div([html.H6('Original Document\'s Title')], style={'marginTop': 20}),
+            html.Div(id='output-container-document2'),
             html.Div([html.H6('Passage Context')], style={'marginTop': 20}),
-            html.Div(id='output-container-context2'),
-            html.Div([html.H6('Original Document')], style={'marginTop': 20}),
-            html.Div(id='output-container-document2')
+            html.Div(id='output-container-context2')
         ]),
     ],colors={
         "border": "pink",
@@ -70,12 +74,13 @@ app.layout = html.Div([
 @app.callback(
     [dash.dependencies.Output('output-container-answer', 'children'),
     dash.dependencies.Output('output-container-context', 'children'),
-    dash.dependencies.Output('output-container-document', 'children')],
+    dash.dependencies.Output('output-container-document', 'children'),
+    dash.dependencies.Output('output-container-answer-annotated', 'children')],
     [dash.dependencies.Input('query-dropdown', 'value')])
 def update_tab1(value):
     #return (df[df['question_text']==value]['short_answers']),(df[df['question_text']==value]['paragraphs']),(df[df['question_text']==value]['title'])
     prediction = cdqa_pipeline.predict(query=value)
-    return (prediction[0], prediction[2], prediction[1])
+    return (prediction[0], df[df['question_text']==value]['short_answers'], prediction[2], prediction[1])
 
 @app.callback(
     [dash.dependencies.Output('output-container-answer2', 'children'),
