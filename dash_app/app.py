@@ -73,8 +73,8 @@ app.layout = html.Div([
 @app.callback(
     [dash.dependencies.Output('output-container-answer', 'children'),
     dash.dependencies.Output('output-container-answer-annotated', 'children'),
-    dash.dependencies.Output('output-container-document', 'children'),
-    dash.dependencies.Output('output-container-context', 'children')],
+    dash.dependencies.Output('output-container-context', 'children'),
+    dash.dependencies.Output('output-container-document', 'children'),],
     [dash.dependencies.Input('query-dropdown', 'value')])
 def update_tab1(value):
     #return (df[df['question_text']==value]['short_answers']),(df[df['question_text']==value]['paragraphs']),(df[df['question_text']==value]['title'])
