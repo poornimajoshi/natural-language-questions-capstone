@@ -17,8 +17,7 @@ app = dash.Dash(__name__ , external_stylesheets=external_stylesheets)
 
 tabs_style = {
     'borderBottom': '200px',
-    'height': '60px',
-    'width' : '1100px'
+    'height': '60px'
 }
 
 
@@ -34,7 +33,7 @@ app.layout = html.Div([
                 value = "Choose a text from the list",
                 placeholder="Select a question or type your own question"),
             html.Div([html.H3('Predictions')],style={'marginTop': 50}),
-            html.Div(html.H6('Answer')),
+            html.Div(html.H6('Predicted answer')),
             html.Div(id='output-container-answer'),
             html.Div(html.H6('Annotated answer')),
             html.Div(id='output-container-answer-annotated'),
@@ -73,9 +72,9 @@ app.layout = html.Div([
 
 @app.callback(
     [dash.dependencies.Output('output-container-answer', 'children'),
-    dash.dependencies.Output('output-container-context', 'children'),
+    dash.dependencies.Output('output-container-answer-annotated', 'children'),
     dash.dependencies.Output('output-container-document', 'children'),
-    dash.dependencies.Output('output-container-answer-annotated', 'children')],
+    dash.dependencies.Output('output-container-context', 'children')],
     [dash.dependencies.Input('query-dropdown', 'value')])
 def update_tab1(value):
     #return (df[df['question_text']==value]['short_answers']),(df[df['question_text']==value]['paragraphs']),(df[df['question_text']==value]['title'])
