@@ -15,17 +15,25 @@ cdqa_pipeline = QAPipeline(reader=path_to_model)
 cdqa_pipeline.fit_retriever(df=df)
 app = dash.Dash(__name__ , external_stylesheets=external_stylesheets)
 
+tabs_style = {
+    'borderBottom': '200px',
+    'height': '60px',
+    'width' : '1100px'
+}
+
+
 app.title = 'cdqa-app'
 app.layout = html.Div([
     html.Div(html.H1('Question Answering Visualization')),
     dcc.Tabs(id='tabs', children=[
-        dcc.Tab(label='Choose a text from the dropdown', value='tab-1',children = [
-            html.Div(html.H6('Choose an example from the below list')),
+        dcc.Tab(label='Choose a question from the dropdown', value='tab-1',children = [
+            html.Div([html.H6('Choose an example from the list below')],style={'marginTop': 50}),
             dcc.Dropdown(
                 id='query-dropdown',
                 options=[{"label": i, "value": i} for i in df['question_text']],
                 value = "Choose a text from the list",
                 placeholder="Select a question or type your own question"),
+            html.Div([html.H3('Predictions')],style={'marginTop': 50}),
             html.Div(html.H6('Answer')),
             html.Div(id='output-container-answer'),
             html.Div(html.H6('Passage Context')),
@@ -33,14 +41,15 @@ app.layout = html.Div([
             html.Div(html.H6('Original Document')),
             html.Div(id='output-container-document')
         ]),
-        dcc.Tab(label='Input own text', value='tab-2', children=[
-            html.Div(html.H6('Type your own question')),
+        dcc.Tab(label='Input your question', value='tab-2', children=[
+            html.Div([html.H6('Type your own question')],style={'marginTop': 50}),
             dcc.Textarea(
                 id='textarea',
                 placeholder='Input your text here',
-                style={'width': '100%', 'height': 100},
+                style={'width': '100%', 'height': 75},
             ),
             html.Button('Submit', id='textarea_submit', n_clicks=0),
+            html.Div([html.H3('Predictions')],style={'marginTop': 50}),
             html.Div(html.H6('Answer')),
             html.Div(id='output-container-answer2'),
             html.Div(html.H6('Passage Context')),
@@ -48,8 +57,12 @@ app.layout = html.Div([
             html.Div(html.H6('Original Document')),
             html.Div(id='output-container-document2')
         ]),
-    ]),
-], style={'padding': '60px 100px 60px 100px'})
+    ],colors={
+        "border": "pink",
+        "primary": "pink",
+        "background": "#ffe6e6"
+    }, style=tabs_style)
+], style={'padding': '60px 150px 60px 150px'})
 #'background-image': 'url(https://hougumlaw.com/wp-content/uploads/2016/05/light-website-backgrounds-light-color-background-images-light-color-background-images-for-website-1024x640-300x188.jpg)'})
 
 
