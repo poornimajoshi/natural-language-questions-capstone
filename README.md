@@ -5,12 +5,13 @@ This project is to provide an interface where users can fit their data to BERT o
 ### How to run
 - Checkout out the repository
 - Download the `models` using
-
-`# Downloading pre-trained BERT fine-tuned on SQuAD 1.1
+```
+# Downloading pre-trained BERT fine-tuned on SQuAD 1.1
 download_model('bert-squad_1.1', dir=directory)
 
 # Downloading pre-trained DistilBERT fine-tuned on SQuAD 1.1
-download_model('distilbert-squad_1.1', dir=directory)`
+download_model('distilbert-squad_1.1', dir=directory)
+```
 - Run the `app.py` file in order to start-up the server
 - Replace the dataset file with your our file
  
